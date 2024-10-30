@@ -77,8 +77,15 @@ done
 
 #echo $(jq <${jsonoutput}/page_1.json '.[] | {html:.html_url}')
 
-$i = $i + 1;
-for i in $(seq 0 $i); do
-	n=$(jq '.length')
-	echo $n
+i=$((i - 1));
+echo $i
+for page in $(seq 1 $i); do
+	n=$(jq '. | length' <${jsonoutput}/page_${page}.json)
+	log "Parsing page $page in org $org_name"
+	log "$n repos on page $page"
+	for repo in $(seq 0 $((n-1))); do 
+		repo_data=$(jq ".[${repo}] | {name,html_url,visibility}" <${jsonoutput}/page_${page}.json)
+		echo $repo_data
+#| jq '.visibility'
+	done
 done
