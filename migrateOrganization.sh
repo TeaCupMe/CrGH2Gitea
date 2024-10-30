@@ -75,4 +75,10 @@ while $CURL "https://api.github.com/orgs/${org_name}/repos?page=${i}&per_page=10
 	(( i++ && $(cat ${jsonoutput}/page_${i}.json) ))
 done
 
-echo $(jq <${jsonoutput}/page_1.json '.[].html_url')
+#echo $(jq <${jsonoutput}/page_1.json '.[] | {html:.html_url}')
+
+$i = $i + 1;
+for i in $(seq 0 $i); do
+	n=$(jq '.length')
+	echo $n
+done
